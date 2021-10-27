@@ -1,17 +1,25 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>Look at this file tree:</h1>
+    <tree-wrapper
+      :item="filesData"
+    />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import TreeWrapper from './components/TreeWrapper.vue'
+import filesData from '../public/static/node_modules.json'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    TreeWrapper
+  },
+  data() {
+    return {
+      filesData
+    }
   }
 }
 </script>
@@ -21,7 +29,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   margin-top: 60px;
 }

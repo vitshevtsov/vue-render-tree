@@ -32,7 +32,16 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+      "vue/max-attributes-per-line": ["warn", {
+        "singleline": {
+          "max": 1
+        },      
+        "multiline": {
+          "max": 1
+        }
+      }]
+    }
   },
   "browserslist": [
     "> 1%",
