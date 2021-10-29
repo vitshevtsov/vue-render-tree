@@ -1,31 +1,35 @@
 <template>
   <li>
-    <div>
-      <span
+    <div 
+      class="folder-wrapper"
+      v-on:click="isOpen = !isOpen"
+    >
+      <icon-is-content
+        v-bind:isOpen="isOpen"
         v-if="hasContent"
-        v-on:click="isOpen = !isOpen"
-        class="open-close-icon"
-      >
-        {{ isOpen ? "[-]" : "[+]" }}
-      </span>
-      <div class="folder-wrapper">
+      />
+      <div class="folder-wrapper_empty">
         <span>&#128194;</span>
         <span>{{ item.name }}</span>
       </div>
     </div>
-    <ul v-if="isOpen">
+    <ul 
+      v-if="isOpen" 
+    >
       <div 
         v-for="(child, index) in item.contents" 
         :key="index">
           <folder-item
             v-if="child.type === 'directory'"
-            :selected="selected"
+            :pathToSelected="pathToSelected"
+            :selectedId="selectedId"
             v-bind:item="child"
             v-on:click-on-content="clickHandler"
           />
           <content-item
             v-else
-            :selected="selected"
+            :pathToSelected="pathToSelected"
+            :selectedId="selectedId"
             v-bind:item="child"
             v-on:click-on-content="clickHandler"
           />
@@ -36,14 +40,17 @@
 
 <script>
 import ContentItem from "./ContentItem.vue";
+import IconIsContent from './Icons/IconIsContent.vue';
 export default {
   name: "FolderItem",
   props: {
     item: Object,
-    selected: Object,
+    pathToSelected: String,
+    selectedId: String
   },
   components: {
     ContentItem,
+    IconIsContent,
   },
   data: function () {
     return {
@@ -57,20 +64,15 @@ export default {
   },
   methods: {
 
-    // если в параметрах пришел выделенный объект, то вторым параметром
-    // дальше передаем путь (складываем имена родителей)
-    clickHandler(item, selectedName) {
-      if (item !== {}) {
+    // формируем путь к выделенному файлу и передаем наверх вместе с его ID
+    clickHandler(selectedName, selectedId) {
         this.$emit(
           "click-on-content",
-          item,
-          this.item.name + " / " + selectedName
+          this.item.name + " / " + selectedName,
+          selectedId
         );
-      } else {
-        this.$emit("click-on-content", item, "");
-      }
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -84,13 +86,12 @@ li {
 }
 
 .folder-wrapper {
+  cursor: pointer;
+}
+
+.folder-wrapper_empty {
   display: inline-block;
   box-sizing: border-box;
 }
 
-.open-close-icon {
-  display: inline-block;
-  width: 20px;
-  cursor: pointer;
-}
 </style>

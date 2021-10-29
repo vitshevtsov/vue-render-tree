@@ -2,7 +2,7 @@
   <li
     class="content-item"
     v-bind:class="{ 'content-item--selected': isSelected }"
-    v-on:click="selectHandler(item)"
+    v-on:click="clickHandler(item)"
   >
     <span> {{ item.type === "file" ? "&#128196;" : "&#128225;" }}</span>
     {{ item.name }}
@@ -14,27 +14,49 @@ export default {
   name: "ContentItem",
   props: {
     item: Object,
-    selected: Object,
+    pathToSelected: String,
+    selectedId: String
+
   },
+  data: function () {
+    return {
+      id: undefined
+    };
+  },
+
+  // в момент создания (открытие папки-родителя) присваиваем уникальный Id
+  // для дальнейшего сравнения с пропсами о выделенном файле
+  created() {
+    this.id = this.item.name + ' ' + Date.now();
+  },
+  
+  // если согласно пропсам, наш элемент сейчас выделен,
+  //  при закрытии папки-родителя передаем наверх инфу о снятии выделения
+  beforeDestroy() {
+    if (this.id === this.selectedId) {
+      this.$emit("click-on-content", '', undefined);
+    }
+  },
+
   computed: {
-    isSelected() {
-      return this.selected === this.item;
-    },
+    isSelected: function () {
+      return this.id === this.selectedId;
+    }
   },
 
   methods: {
-    
-    // если в компоненте TreeWrapper не записан наш элемент как уже выделенный,
-    // то дальше передаем наверх его и его имя для формирования пути
-    selectHandler(item) {
-      if (this.selected !== item) {
-        this.$emit("click-on-content", item, item.name);
+    // если в компоненте TreeWrapper не записан ID данного элемента как уже выделенного,
+    // то дальше передаем наверх его имя и id для формирования пути и сохранения id,
+    // в противном случае это повторный клик по элементу - выделение снимается
+    clickHandler(item) {
+      if (this.id !== this.selectedId) {
+        this.$emit("click-on-content", item.name, this.id);
       } else {
-        this.$emit("click-on-content", {}, "");
+        this.$emit("click-on-content", '', undefined);
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style scoped>

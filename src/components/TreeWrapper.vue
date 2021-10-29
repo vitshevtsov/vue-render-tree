@@ -3,7 +3,8 @@
     <div class="path-wrapper"><b>Path to selected file:</b> {{ pathToSelected }}</div>
     <folder-item
       :item="item"
-      :selected="selected"
+      :pathToSelected="pathToSelected"
+      :selectedId="selectedId"
       v-on:click-on-content="clickOnContent"
     />
   </div>
@@ -20,23 +21,20 @@ export default {
     item: Object,
   },
   
-  // храним здесь выбранный файл / папку, и путь до нее
+  // храним здесь путь к текущему выделенному файлу / ссылке, и его ID
   data: function () {
     return {
-      selected: {},
       pathToSelected: '',
+      selectedId: undefined
     };
   },
   methods: {
     
-    // метод принимает файл-объект, по которому кликнули, и путь до него
-    clickOnContent(item, pathToSelectedEl) {
-      this.selected = item;
-      this.pathToSelected = pathToSelectedEl;
-      
-      //предполагалось, что это точно очистит путь, если нет выделенных файлов,
-    //но пока не работает, где-то косяк
-      if (this.selected === {}) this.pathToSelected = '';
+    // метод принимает путь к выделенному файлу / ссылке, и его ID
+    clickOnContent(pathToSelectedEl, selectedElId) {
+        this.pathToSelected = pathToSelectedEl;
+        this.selectedId = selectedElId;
+        if (this.selectedId === undefined) this.pathToSelected = '';
     },
   },
 };
@@ -44,6 +42,8 @@ export default {
 
 <style scoped>
 .path-wrapper {
+    margin-bottom: 20px;
+    padding-left: 20px;;
     min-height: 50px;
     display: flex;
     align-items: center;
