@@ -58,5 +58,5 @@ JSON хранится в public/static/node_modules.json.
 
 Эти решения вы принимаете сами.
 
-# Задание в рамках прохождения курса OZON Route256 (Frontend)
+## Задание в рамках прохождения курса OZON Route256 (Frontend)
 https://route256.ozon.ru/
