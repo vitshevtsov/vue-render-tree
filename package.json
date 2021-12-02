@@ -1,5 +1,5 @@
 {
-  "name": "route-256-tree-component",
+  "name": "vue-render-tree",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -33,14 +33,17 @@
       "parser": "babel-eslint"
     },
     "rules": {
-      "vue/max-attributes-per-line": ["warn", {
-        "singleline": {
-          "max": 1
-        },      
-        "multiline": {
-          "max": 1
+      "vue/max-attributes-per-line": [
+        "warn",
+        {
+          "singleline": {
+            "max": 1
+          },
+          "multiline": {
+            "max": 1
+          }
         }
-      }]
+      ]
     }
   },
   "browserslist": [
